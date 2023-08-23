@@ -1,0 +1,81 @@
+body {
+    background-color: white;
+}
+H1 {
+    font-size: 46px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: blueviolet;
+}
+H2 {
+    font-size: 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: blueviolet;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+.data-container{
+    display: flex;
+    background-color: Blue;
+}
+Span{
+    font-weight: bold;
+    margin: 15px;
+    padding: 10px;
+    font-size: larger;
+    background-color: white;
+    flex: 1;
+    color: orange
+}
+.myaddinputs {
+    background-color: blue;
+    display: flex;
+    flex-wrap: wrap;
+    /* for horizontal aligning of child divs */
+    justify-content: center;
+    /* for vertical aligning */
+    align-items: center;
+}
+.mydelinputs {
+    background-color: blue;
+    display: flex;
+    flex-wrap: wrap;
+    /* for horizontal aligning of child divs */
+    justify-content: center;
+    /* for vertical aligning */
+    align-items: center;
+}
+p {
+    font-size: 20px;
+    color: white;
+}
+Input {
+    font-size: 20px;
+    width: fit-content;
+    margin: 20px;
+}
+Button {
+    width: fit-content;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 50px;
+    font-size: 22px;
+    border: 2px solid black;
+    background-image: linear-gradient(to right, orangered,orange,yellow);
+    background-size: 200%;
+    -o-transition: ease-in-out 1s;
+    -webkit-transition: ease-in-out 1s;
+    transition: ease-in-out 1s;
+}
+Button:hover{
+    cursor: pointer;
+    background-position: 100% 0;
+    -o-transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+    color: black
+}
