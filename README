@@ -1,0 +1,13 @@
+This is a simple app to track some key aspects of health: ounces of water you drink and steps you take!
+
+There are a couple of ways to start:
+
+1. Make a CSV file to upload to a SQLITE DB through Pandas. The headers should appear as follows: "Date,Steps,Water" 
+The following commands will do this. In my case, I have named the table within the database 'steven' Please use this format: 2023-01-01,4934,58. Where the unit of water is ounces.
+-df = pd.read_csv('healthtrack/watersteps.csv')
+-df.to_sql('steven',conn,if_exists='replace',index=False)
+2. If you do not want to bulk upload, or you already have a DB ready to go, simply run the python file (NOTE: this is in debug mode and is not meant for a production environment. 
+Then you will be able to add through the GUI one by one. You also have the option to delete a date if something is incorrect. 
+
+If you are not a fan of my musical tastes ( I use Griftwood by Ghost when you reach the goal and Say it Aint So by Weezer when you do not), simply replace the audio files :D
+Also, the goals are hardcoded to be 6000 steps and 70 ounces of water a day. If you want to change this, you can change the values within the code.
