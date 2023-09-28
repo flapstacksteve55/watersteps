@@ -3,7 +3,12 @@ import pandas as pd
 import sqlite3 
 import plotly.express as px
 import datetime
-
+import smtplib, ssl
+import os
+from dotenv import load_dotenv
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 
 
 #connect to watersteps db
@@ -67,6 +72,7 @@ app.layout = html.Div([html.Img(src=r'assets/waterguy.jpeg', alt='image',classNa
         html.Button(id='wrong', children= 'Submit',n_clicks=None)]),
         html.Br(),
         html.Br(),
+        html.Button(id='email', children= 'SEND EMAIL REPORT',n_clicks=None),
     dash_table.DataTable(id='table',data=table,page_size=5,style_data={
         'color': 'orange',
         'backgroundColor': 'blue',
@@ -88,6 +94,7 @@ app.layout = html.Div([html.Img(src=r'assets/waterguy.jpeg', alt='image',classNa
     dcc.Graph(id='line1',figure=waterfig,style={'display': 'inline-block','padding': 5})]),
     html.Div(id='my-div'),
     html.Br(),
+    html.Div(id='rando'),
     html.Div(className='data-container',id='info',children=[
     html.Span(id='smeanhead',children='Average of Steps: '),
     html.Span(id='spcthead',children='Percent of Days Steps Goal was Met: '),
@@ -102,6 +109,63 @@ app.layout = html.Div([html.Img(src=r'assets/waterguy.jpeg', alt='image',classNa
     html.Span(id='wpct',children=water_pct)]),
     ])
 
+@app.callback(
+     Output(component_id='rando',component_property='children'),
+    Input(component_id='email', component_property='n_clicks'),
+    prevent_initial_call=True,
+    )
+
+def sendupdate(n):
+    
+
+    #connect to the gmail server
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+
+    #Start TLS for security purposes
+    s.starttls()
+
+    #provide the passowrd
+
+    load_dotenv("healthtrack/cred.env")
+    password = os.environ.get("password")
+
+    #create the subject and message we want and send from/to the correct addresses
+
+    SUBJECT = "New Homes!"
+
+    sender_email = os.environ.get("sender_email")
+    receiver_email = os.environ.get("recepient_email")
+
+    #log in
+    s.login(sender_email, password)
+
+    msg = MIMEMultipart()
+    msg['Subject'] = SUBJECT
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    
+    html = """\
+    <html>
+  <head></head>
+  <body>
+    {0} You have averaged {1} steps! Your water average (in ounces) is {2}.
+  </body>
+</html>
+""".format(df.to_html(),Step_Mean,Water_Mean)
+
+    part1 = MIMEText(html, 'html')
+    msg.attach(part1)
+    
+    
+
+    #send mail
+    s.send_message(msg)
+
+    #quit server
+    s.quit()
+    
+    txt = ""
+    return txt
 
 @app.callback(
     Output(component_id='yes',component_property= 'children'),
