@@ -117,7 +117,26 @@ app.layout = html.Div([html.Img(src=r'assets/waterguy.jpeg', alt='image',classNa
 
 def sendupdate(n):
     
+    conn = sqlite3.connect('healthtrack/watersteps.db')
+    #get the data from the database table for "steven"
+    df = pd.read_sql("select * FROM steven", conn)
+    #produce the line charts
+    stepfig=px.line(df, x='Date', y= 'Steps',markers=True)
+    stepfig.add_hline(y=6000)
+    stepfig.update_traces(line_color='orange')
+    stepfig.update_layout(paper_bgcolor='lightblue')
 
+    waterfig=px.line(df, x='Date', y='Water',markers=True)
+    waterfig.add_hline(y=72)
+    waterfig.update_traces(line_color='blue')
+    waterfig.update_layout(paper_bgcolor='lightblue')
+    #produce the table
+    df = df.rename({'Water': 'Water (Ounces)'}, axis='columns')
+    table = df.to_dict('records')
+
+    #calculate averages for both measurements
+    Water_Mean = df['Water (Ounces)'].mean().round(2)
+    Step_Mean = df["Steps"].mean().round(2)
     #connect to the gmail server
     s = smtplib.SMTP('smtp.gmail.com', 587)
 
@@ -131,7 +150,7 @@ def sendupdate(n):
 
     #create the subject and message we want and send from/to the correct addresses
 
-    SUBJECT = "New Homes!"
+    SUBJECT = "Your Latest Water and Steps Report!"
 
     sender_email = os.environ.get("sender_email")
     receiver_email = os.environ.get("recepient_email")
